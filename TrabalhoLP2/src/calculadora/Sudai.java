@@ -32,7 +32,7 @@ public class Sudai implements ActionListener, KeyListener {
 
 	private JFrame frame;
 	private JTextField textFieldResult;
-	private JButton Erased;
+	private JButton Reset;
 	private JButton soma;
 	private Component subtrai;
 	private Component multiplica;
@@ -57,6 +57,8 @@ public class Sudai implements ActionListener, KeyListener {
 	private JButton fParenteses;
 	private JButton igual;
 	private JTextField textFieldOp;
+	private JButton Erased;
+	private JButton logaritimo;
 
 	/**
 	 * Launch the application.
@@ -100,7 +102,7 @@ public class Sudai implements ActionListener, KeyListener {
 		textFieldResult.setBounds(0, 40, 432, 50);
 		panel_principal.add(textFieldResult);
 		textFieldResult.setColumns(10);
-		
+
 		textFieldOp = new JTextField();
 		textFieldOp.setEditable(false);
 		textFieldOp.setBounds(0, 0, 432, 40);
@@ -108,19 +110,24 @@ public class Sudai implements ActionListener, KeyListener {
 		textFieldOp.setColumns(10);
 
 		panel = new JPanel();
-		panel.setBounds(0, 88, 432, 90);
+		panel.setBounds(0, 88, 432, 65);
 		panel_principal.add(panel);
 		panel.setLayout(null);
 
+		Reset = new JButton("Reset");
+		Reset.setBounds(305, 0, 127, 64);
+		Reset.addActionListener(this);
+		panel.add(Reset);
+
 		Erased = new JButton("Excluir");
-		Erased.setBounds(293, 13, 127, 64);
+		Erased.setBounds(0, 0, 127, 64);
 		Erased.addActionListener(this);
 		panel.add(Erased);
 
 		panel_teclado = new JPanel();
-		panel_teclado.setBounds(0, 176, 432, 277);
+		panel_teclado.setBounds(0, 154, 432, 299);
 		panel_principal.add(panel_teclado);
-		panel_teclado.setLayout(new GridLayout(4, 5, 2, 2));
+		panel_teclado.setLayout(new GridLayout(0, 4, 0, 0));
 
 		um = new JButton("1");
 		panel_teclado.add(um);
@@ -131,6 +138,9 @@ public class Sudai implements ActionListener, KeyListener {
 		tres = new JButton("3");
 		panel_teclado.add(tres);
 
+		raiz = new JButton("raiz(");
+		panel_teclado.add(raiz);
+
 		quatro = new JButton("4");
 		panel_teclado.add(quatro);
 
@@ -139,6 +149,9 @@ public class Sudai implements ActionListener, KeyListener {
 
 		seis = new JButton("6");
 		panel_teclado.add(seis);
+
+		logaritimo = new JButton("log(");
+		panel_teclado.add(logaritimo);
 
 		sete = new JButton("7");
 		panel_teclado.add(sete);
@@ -149,8 +162,20 @@ public class Sudai implements ActionListener, KeyListener {
 		nove = new JButton("9");
 		panel_teclado.add(nove);
 
+		elevado = new JButton("^");
+		panel_teclado.add(elevado);
+
+		ponto = new JButton(".");
+		panel_teclado.add(ponto);
+
 		zero = new JButton("0");
 		panel_teclado.add(zero);
+
+		aParenteses = new JButton("(");
+		panel_teclado.add(aParenteses);
+
+		fParenteses = new JButton(")");
+		panel_teclado.add(fParenteses);
 
 		soma = new JButton("+");
 		panel_teclado.add(soma);
@@ -164,21 +189,6 @@ public class Sudai implements ActionListener, KeyListener {
 		divide = new JButton("/");
 		panel_teclado.add(divide);
 
-		ponto = new JButton(".");
-		panel_teclado.add(ponto);
-
-		raiz = new JButton("raiz(");
-		panel_teclado.add(raiz);
-
-		elevado = new JButton("^");
-		panel_teclado.add(elevado);
-
-		aParenteses = new JButton("(");
-		panel_teclado.add(aParenteses);
-
-		fParenteses = new JButton(")");
-		panel_teclado.add(fParenteses);
-
 		igual = new JButton("=");
 		panel_teclado.add(igual);
 
@@ -190,7 +200,7 @@ public class Sudai implements ActionListener, KeyListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(((JButton)e.getSource()).getText() == "Excluir") {
+		if (((JButton) e.getSource()).getText() == "Reset") {
 			Calculos.clean();
 			textFieldResult.setText("");
 			textFieldOp.setText("");
@@ -242,6 +252,10 @@ public class Sudai implements ActionListener, KeyListener {
 			break;
 		case "raiz(":
 			key = "r(";
+		case "log(":
+			if(key.equals("log(")){
+				key = "l(";
+			}
 		case "+":
 		case "-":
 		case "*":
@@ -256,12 +270,16 @@ public class Sudai implements ActionListener, KeyListener {
 			textFieldOp.setText(Calculos.getExpressao().toString());
 			break;
 		case "=":
+			textFieldResult.setText("");
 			System.out.println("------->>> Efetua cálculo <<<------- ");
 			Calculos.efetuaCalculo();
 			textFieldOp.setText(String.valueOf(Calculos.getResultado()));
 			Calculos.clean();
 			break;
-		
+		case "Excluir":
+			Calculos.Excluir();
+			textFieldOp.setText(Calculos.getExpressao().toString());
+			break;
 		default:
 			break;
 		}
