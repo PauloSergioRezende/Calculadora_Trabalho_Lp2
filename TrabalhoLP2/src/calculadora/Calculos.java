@@ -44,7 +44,12 @@ public class Calculos {
 
 	public static void efetuaCalculo() {
 		System.out.println("-----> INICIO: efetuaCalculo <-----");
-		resultado = calculaExprecao(expressao).toString();
+		if(lastIndexBordaNumero(String.valueOf(expressao.charAt(expressao.length()-1))) != -1) {
+			resultado = "Expreção não terminada";
+		}else {
+			resultado = calculaExprecao(expressao).toString();
+		}
+		
 		System.out.println("-----> FIM: efetuaCalculo <-----");
 	}
 
@@ -109,7 +114,7 @@ public class Calculos {
 		}
 
 		aux = key.indexOf("l");
-		if (aux != -1) {
+		if (aux != -1 && key.indexOf("a") == -1) {
 			System.out.println("logaritimo encontrado");
 			System.out.println("Estado da expressão pré calculo:" + key);
 			key = calcula(key, aux, "l");
@@ -117,7 +122,7 @@ public class Calculos {
 		}
 
 		aux = key.indexOf("r");
-		if (aux != -1 && key.charAt(aux + 1) != 'e') {
+		if (aux != -1 && key.indexOf("a") == -1) {
 			System.out.println("Radiciação encontrado");
 			System.out.println("Estado da expressão pré calculo:" + key);
 			key = calcula(key, aux, "r");
@@ -125,7 +130,7 @@ public class Calculos {
 		}
 
 		aux = key.indexOf("^");
-		if (aux != -1) {
+		if (aux != -1 && key.indexOf("a") == -1) {
 			System.out.println("Exponenciação encontrado");
 			System.out.println("Estado da expressão pré calculo:" + key);
 			key = calcula(key, aux, "^");
@@ -133,7 +138,7 @@ public class Calculos {
 		}
 
 		aux = key.indexOf("*");
-		if (aux != -1) {
+		if (aux != -1 && key.indexOf("a") == -1) {
 			System.out.println("multiplicação encontrado");
 			System.out.println("Estado da expressão pré calculo:" + key);
 			key = calcula(key, aux, "*");
@@ -141,7 +146,7 @@ public class Calculos {
 		}
 
 		aux = key.indexOf("/");
-		if (aux != -1) {
+		if (aux != -1 && key.indexOf("a") == -1) {
 			System.out.println("Divisão encontrado");
 			System.out.println("Estado da expressão pré calculo:" + key);
 			key = calcula(key, aux, "/");
@@ -149,7 +154,7 @@ public class Calculos {
 		}
 
 		aux = key.indexOf("-");
-		if (aux != -1) {
+		if (aux != -1 && key.indexOf("a") == -1) {
 			System.out.println("subtração encontrado");
 			System.out.println("Estado da expressão pré calculo:" + key);
 			key = calcula(key, aux, "-");
@@ -157,10 +162,18 @@ public class Calculos {
 		}
 
 		aux = key.indexOf("+");
-		if (aux != -1) {
+		if (aux != -1 && key.indexOf("a") == -1) {
 			System.out.println("soma encontrado");
 			System.out.println("Estado da expressão pré calculo:" + key);
 			key = calcula(key, aux, "+");
+			System.out.println("Estado da expressão pos calculo:" + key);
+		}
+		
+		aux = key.indexOf("I");
+		if (aux != -1 && key.indexOf("a") == -1) {
+			System.out.println("soma encontrado");
+			System.out.println("Estado da expressão pré calculo:" + key);
+			key = calcula(key, aux, "I");
 			System.out.println("Estado da expressão pos calculo:" + key);
 		}
 
@@ -216,9 +229,9 @@ public class Calculos {
 			} else if (operador == "l") {
 				v2 = Math.E;
 			} else {
-				if (operador.equals("+")) {
+				if (operador.equals("+")||operador.equals("I")) {
 					v2 = 0D;
-				} else {
+				} else{	
 					return new StringBuffer("!!!Expreção invalida!!!");
 				}
 			}
@@ -248,13 +261,15 @@ public class Calculos {
 			return String.valueOf(Math.pow(v1, (1 / v2)));
 		case "l":
 			return String.valueOf(Math.log(v1) / Math.log(v2));
+		case "I":
+			return String.valueOf(1 / v1);
 		default:
 			return "b";
 		}
 	}
 
 	private static int lastIndexBordaNumero(String substring) {
-		int[] t = new int[7];
+		int[] t = new int[8];
 		int r = -1;
 
 		t[0] = substring.lastIndexOf("^");
@@ -264,8 +279,9 @@ public class Calculos {
 		t[4] = substring.lastIndexOf("/");
 		t[5] = substring.lastIndexOf("+");
 		t[6] = substring.lastIndexOf("-");
+		t[7] = substring.lastIndexOf("I");
 
-		for (int i = 0; i <= 6; i++) {
+		for (int i = 0; i <= 7; i++) {
 			if (t[i] != -1) {
 				if (t[i] > r) {
 					r = t[i];
@@ -277,18 +293,19 @@ public class Calculos {
 	}
 
 	private static int indexBordaNumero(String substring) {
-		int[] t = new int[7];
+		int[] t = new int[8];
 		int r = substring.length();
 
-		t[0] = substring.indexOf("^");
-		t[1] = substring.indexOf("r");
-		t[2] = substring.indexOf("l");
-		t[3] = substring.indexOf("*");
-		t[4] = substring.indexOf("/");
-		t[5] = substring.indexOf("+");
-		t[6] = substring.indexOf("-");
+		t[0] = substring.lastIndexOf("^");
+		t[1] = substring.lastIndexOf("r");
+		t[2] = substring.lastIndexOf("l");
+		t[3] = substring.lastIndexOf("*");
+		t[4] = substring.lastIndexOf("/");
+		t[5] = substring.lastIndexOf("+");
+		t[6] = substring.lastIndexOf("-");
+		t[7] = substring.lastIndexOf("I");
 
-		for (int i = 0; i <= 6; i++) {
+		for (int i = 0; i <= 7; i++) {
 			if (t[i] != -1) {
 
 				if (t[i] < r) {
@@ -322,8 +339,10 @@ public class Calculos {
 		if (lastIndexBordaNumero(key.substring(0, aux)) != aux - 1) {
 			if (key.toString().charAt(aux - 1) == '(') {
 				key.insert(aux, "+" + nKey.toString());
-			} else if (lastIndexBordaNumero(key.substring(0, aux)) < aux - 1) {
+			} else if ((lastIndexBordaNumero(key.substring(0, aux)) < aux - 1)) {
 				key.insert(aux, "*" + nKey.toString());
+			} else {
+				key.insert(aux, nKey.toString());
 			}
 		} else {
 			key.insert(aux, nKey.toString());

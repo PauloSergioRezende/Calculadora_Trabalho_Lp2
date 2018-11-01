@@ -59,6 +59,8 @@ public class Sudai implements ActionListener, KeyListener {
 	private JTextField textFieldOp;
 	private JButton Erased;
 	private JButton logaritimo;
+	private JButton Inversão;
+	private JButton Mostrar;
 
 	/**
 	 * Launch the application.
@@ -123,6 +125,11 @@ public class Sudai implements ActionListener, KeyListener {
 		Erased.setBounds(0, 0, 127, 64);
 		Erased.addActionListener(this);
 		panel.add(Erased);
+		
+		Mostrar = new JButton("Mostrar");
+		Mostrar.setBounds(150, 0, 127, 64);
+		Mostrar.addActionListener(this);
+		panel.add(Mostrar);
 
 		panel_teclado = new JPanel();
 		panel_teclado.setBounds(0, 154, 432, 299);
@@ -188,6 +195,9 @@ public class Sudai implements ActionListener, KeyListener {
 
 		divide = new JButton("/");
 		panel_teclado.add(divide);
+		
+		Inversão = new JButton("Inv(");
+		panel_teclado.add(Inversão);
 
 		igual = new JButton("=");
 		panel_teclado.add(igual);
@@ -256,6 +266,10 @@ public class Sudai implements ActionListener, KeyListener {
 			if(key.equals("log(")){
 				key = "l(";
 			}
+		case "Inv(":
+			if(key.equals("Inv(")) {
+				key = "I(";
+			}
 		case "+":
 		case "-":
 		case "*":
@@ -274,12 +288,17 @@ public class Sudai implements ActionListener, KeyListener {
 			System.out.println("------->>> Efetua cálculo <<<------- ");
 			Calculos.efetuaCalculo();
 			textFieldOp.setText(String.valueOf(Calculos.getResultado()));
-			Calculos.clean();
+			if(!Calculos.getResultado().equals("Expreção não terminada")) {
+				Calculos.clean();
+			}
+			
 			break;
 		case "Excluir":
 			Calculos.Excluir();
 			textFieldOp.setText(Calculos.getExpressao().toString());
 			break;
+		case "Mostrar":
+			System.out.println("Estado da Expreção: "+Calculos.getExpressao());
 		default:
 			break;
 		}
